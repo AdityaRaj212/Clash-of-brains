@@ -23,10 +23,10 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        validate: {
-          validator: validator.isStrongPassword,
-          message: props => `${props.value} is not a valid password! Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one digit, and one special character.`
-        }
+        // validate: {
+        //   validator: validator.isStrongPassword,
+        //   message: props => `${props.value} is not a valid password! Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one digit, and one special character.`
+        // }
     },
     gamesPlayed: {
         type: Number,

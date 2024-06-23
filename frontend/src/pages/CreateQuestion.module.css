@@ -1,0 +1,37 @@
+.container{
+    padding: 1rem;
+}
+
+.wrapper{
+    border: 2px solid orange;
+    padding: 0.5rem;
+    border-radius: 10px;
+    margin: 0.5rem;
+}
+
+.title{
+    background-color: orange;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 2rem;
+    color: white;
+    font-size: large;
+    font-weight: bold;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    /* margin: -0.5rem -0.5rem 0 -0.5rem; */
+    /* display: inline; */
+}
+
+.centerAlign{
+    text-align: center;
+}
+
+.btnContainer{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.textarea{
+    height: 1rem;
+}

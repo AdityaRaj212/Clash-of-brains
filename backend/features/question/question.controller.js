@@ -7,12 +7,22 @@ export default class QuestionController{
     }
 
     async createQuestion(req,res){
-        const questionData = req.body;
-        const newQuestion = await this.questionRepository.createQuestion(questionData);
-        res.status(201).json({
-            status: true,
-            question: newQuestion
-        });
+        try{
+            const questionData = req.body;
+            console.log(req.body);
+            const newQuestion = await this.questionRepository.createQuestion(questionData);
+            res.status(201).json({
+                status: true,
+                question: newQuestion
+            });
+        }catch(err){
+            console.log('Error while creating question: ' + err);
+            res.status(500).json({
+                status: false,
+                message: 'Error creating question',
+                error: err.message
+            });
+        }
     }
 
     async getQuestionById(req,res){

@@ -1,0 +1,59 @@
+import { createContext, useEffect, useState } from "react";
+import axios from "axios";
+
+const AuthContext = createContext();
+
+const AuthProvider = ({children}) => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(()=>{ 
+        const token = localStorage.getItem('jwtToken');
+        if(token){
+            const storedUser = JSON.parse(localStorage.getItem('userInfo'));
+            setIsAuthenticated(true);
+            setUser(storedUser);
+        }
+    }, []);
+
+    const signIn = async (email, password) => {
+        try {
+            const response = await axios.post('/api/users/signIn', { email, password });
+            const { user, token } = response.data; // Assuming the response contains both user and token
+            localStorage.setItem('jwtToken', token);
+            localStorage.setItem('userInfo', JSON.stringify(user));
+            setIsAuthenticated(true);
+            setUser(user);
+            return { success: true };
+        } catch (error) {
+            console.error('Login error:', error);
+            return { success: false, message: error.response?.data?.msg || 'Login failed' };
+        }
+    };
+
+    const signOut = () => {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userInfo');
+        setIsAuthenticated(false);
+        setUser(null);
+    };
+
+    const signUp = async (name, userName, email, password) => {
+        try {
+            const response = await axios.post('/api/users/signUp', { name, userName,  email, password });
+            const { user } = response.data;
+            return { success: true };
+        } catch (error) {
+            console.error('Signup error:', error);
+            return { success: false, message: error.response?.data?.msg || 'Signup failed' };
+        }
+    };
+
+    return (
+        <AuthContext.Provider value={{isAuthenticated, user, signIn, signUp, signOut}}>
+            {children}
+        </AuthContext.Provider>
+    )
+};
+
+export {AuthProvider, AuthContext};

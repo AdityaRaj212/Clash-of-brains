@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 
 // console.log('MongoDB URI:', process.env.MONGO_URI);
 
-const url = "mongodb+srv://adityaeducation212:adityadb212@cluster0.jm0dl8u.mongodb.net/post-away?retryWrites=true&w=majority&appName=Cluster0";
+// const url = "mongodb+srv://adityaeducation212:adityadb212@cluster0.jm0dl8u.mongodb.net/less-go?retryWrites=true&w=majority&appName=Cluster0";
+const url = "mongodb://127.0.0.1:27017/less-go";
 // const url = process.env.MONGO_URI;
 
 export const connectUsingMongoose = async () => {

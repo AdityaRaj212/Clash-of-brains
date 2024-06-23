@@ -7,12 +7,12 @@ export default class QuestionRepository{
                 ...questionData,
                 solvedBy: [],
                 attemptedBy: [],
-                uploadedBy: userId
             });
             await newQuestion.save();
             return newQuestion;
         }catch(err){
             console.log('Error while creating question: ' + err);
+            throw err;
         }
     }
 

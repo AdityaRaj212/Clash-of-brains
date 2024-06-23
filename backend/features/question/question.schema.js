@@ -31,7 +31,8 @@ const QuestionSchema = new mongoose.Schema({
     },
     points: {
         type: Number,
-        default: 10
+        default: 1,
+        min: 1
     },
     difficulty: {
         type: Number,
@@ -45,8 +46,9 @@ const QuestionSchema = new mongoose.Schema({
         }
     ],
     time: {
-        type: Date,
-        default: Date.now()
+        type: Number,
+        default: 5,
+        min: 5
     },
     solvedBy: [
         {
