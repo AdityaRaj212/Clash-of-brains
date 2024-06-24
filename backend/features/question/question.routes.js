@@ -13,6 +13,10 @@ router.get('/get-by-id/:questionId',(req,res)=>{
     questionController.getQuestionById(req,res);
 });
 
+router.get('/all',(req,res)=>{
+    questionController.getAllQuestions(req,res);
+})
+
 router.put('/update/:questionId',(req,res)=>{
     questionController.updateQuestion(req,res);
 });

@@ -13,6 +13,10 @@ router.post('/signIn', (req,res)=>{
     userController.signIn(req,res);
 });
 
+router.put('/signOut',(req,res)=>{
+    userController.signOut(req,res);
+})
+
 router.get('/get-user-by-id/:userId', (req,res)=>{
     userController.getUserById(req,res);
 });

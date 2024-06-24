@@ -35,6 +35,10 @@ const UserSchema = new mongoose.Schema({
     totalScore: {
         type: Number,
         default: 0
+    },
+    status: {
+        type: String,
+        default: 'Offline'
     }
 });
 

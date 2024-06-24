@@ -28,6 +28,16 @@ export default class QuestionRepository{
         }
     }
 
+    async getAllQuestions(){
+        try{
+            const questions = await QuestionModel.find();
+            return questions;
+        }catch(err){
+            console.log('Error while fetching all questions: ' + err);
+            throw err;
+        }
+    }
+
     async updateQuestion(questionId, updateData){
         try{
             const updatedQuestion = await QuestionModel.findByIdAndUpdate(questionId, updateData, {new: true}).populate('solvedBy attemptedBy uploadedBy');

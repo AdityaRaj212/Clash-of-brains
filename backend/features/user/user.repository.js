@@ -17,6 +17,17 @@ export default class UserRepository{
         }
     }
 
+    async signOut(userId){
+        try{
+            const user = await UserModel.findById(userId);
+            user.status = 'Offline';
+            return user;
+        }catch(err){
+            console.log('Error while loggin out');
+            throw err;
+        }
+    }
+
     async getUser(email,password){
         try{
             const user = await UserModel.findOne({email, password});

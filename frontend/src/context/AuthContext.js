@@ -31,7 +31,14 @@ const AuthProvider = ({children}) => {
         }
     };
 
-    const signOut = () => {
+    const signOut = async () => {
+        try{
+            const response = await axios.put(`/api/users/signOut/${user._id}`);
+            return {success: true, user: response.user};
+        }catch(err){
+            console.log('Logout error: ' + err);
+            return { success: false, message: err.response?.data?.msg || 'Logout failed' };
+        }
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('userInfo');
         setIsAuthenticated(false);

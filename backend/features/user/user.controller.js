@@ -21,6 +21,7 @@ export default class UserController{
     async signIn(req,res){
         const {email,password} = req.body;
         const user = await this.userRepository.getUser(email,password);
+        user.status = 'Online';
         if(user){
             const token = jwt.sign(
                 {
@@ -51,6 +52,24 @@ export default class UserController{
                 status: false,
                 msg: "Invalid credentials"
             });
+        }
+    }
+
+    async signOut(req,res){
+        try{
+            const userId = req.userId;
+            const user = this.userRepository.signOut(userId);
+            res.status(201).json({
+                status: true,
+                msg: 'logged out successfully',
+                user: user
+            });
+        }catch(err){
+            res.status(500).json({
+                status: false,
+                msg: 'Failed to logout',
+                error: err.message
+            })
         }
     }
 
