@@ -23,7 +23,11 @@ router.get('/get-user-by-id/:userId', (req,res)=>{
 
 router.get('/test',(req,res)=>{
     userController.test(req,res);
-})
+});
+
+router.get('/online',(req,res)=>{
+    userController.getOnlineUsers(req,res);
+});
 
 export default router;
 

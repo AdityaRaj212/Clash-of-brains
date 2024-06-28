@@ -39,6 +39,10 @@ const UserSchema = new mongoose.Schema({
     status: {
         type: String,
         default: 'Offline'
+    },
+    lastActive: {
+        type: Date,
+        default: Date.now(),
     }
 });
 

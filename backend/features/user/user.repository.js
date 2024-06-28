@@ -47,4 +47,9 @@ export default class UserRepository{
             throw err;
         }
     }
+
+    async getOnlineUsers() {
+        const users = await UserModel.find({ status: 'Online' });
+        return users;
+    }
 }

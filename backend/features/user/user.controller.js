@@ -1,5 +1,6 @@
 import UserRepository from "./user.repository.js";
 import jwt from 'jsonwebtoken';
+import pusher from "../../config/pusher.js";
 
 
 export default class UserController{
@@ -21,8 +22,9 @@ export default class UserController{
     async signIn(req,res){
         const {email,password} = req.body;
         const user = await this.userRepository.getUser(email,password);
-        user.status = 'Online';
         if(user){
+            user.status = 'Online';
+            await user.save();
             const token = jwt.sign(
                 {
                     userId: user._id,
@@ -33,6 +35,11 @@ export default class UserController{
                     expiresIn: '24h'
                 }
             );
+
+            pusher.trigger('users','new-user',{
+                user: user
+            });
+
             // res.cookie('jwtToken',token,{
             //     maxAge: 24*60*60*1000
             // });
@@ -59,6 +66,10 @@ export default class UserController{
         try{
             const userId = req.userId;
             const user = this.userRepository.signOut(userId);
+            user?.status = 'Offline';
+            pusher.trigger('users','user-logged-out',{
+                userId: userId
+            })
             res.status(201).json({
                 status: true,
                 msg: 'logged out successfully',
@@ -80,6 +91,14 @@ export default class UserController{
             status: true,
             user: user
         })
+    }
+
+    async getOnlineUsers(req, res) {
+        const users = await this.userRepository.getOnlineUsers();
+        res.status(200).json({
+            status: true,
+            users: users
+        });
     }
 
     async test(req,res){
