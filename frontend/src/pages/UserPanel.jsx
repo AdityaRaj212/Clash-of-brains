@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './UserPanel.module.css';
+import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faClipboardList, faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 import Pusher from 'pusher-js';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const UserPanel = () => {
+  const {isAuthenticated, signOut} = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
   // Dummy data
   const [usersOnline, setUsersOnline] = useState([]);
   const preDesignedQuizzes = [
@@ -50,7 +57,23 @@ const UserPanel = () => {
       channel.unbind_all();
       channel.unsubscribe();
   };
-  },[])
+  },[]);
+
+  const handleStartQuiz = ()=>{
+    if(isAuthenticated){
+      navigate('/quiz-waiting-lobby');
+    }else{
+      toast.info('Login to start a quiz');
+    }
+  }
+
+  const handleLogout = ()=>{
+    signOut();
+  }
+
+  const handleLogin = ()=>{
+    navigate('/authentication');
+  }
 
   return (
     <div className={styles.container}>
@@ -58,6 +81,9 @@ const UserPanel = () => {
         <h2 className={styles.sectionTitle}>
           <FontAwesomeIcon icon={faUsers} /> Users Online in Lobby
         </h2>
+        <Button variant="primary" onClick={handleStartQuiz}>
+          Start Quiz
+        </Button>
         <ul className={styles.userList}>
           {usersOnline.map((user, index) => (
             <li key={index} className={styles.userItem}>{user.userName}</li>
@@ -66,6 +92,21 @@ const UserPanel = () => {
       </div>
 
       <div className={styles.contentContainer}>
+        {isAuthenticated &&
+          (
+            <Button variant="danger" onClick={handleLogout}>
+              Logout
+            </Button>
+          )
+        }
+        {!isAuthenticated &&
+          (
+            <Button variant="success" onClick={handleLogin}>
+              Login
+            </Button>
+          )
+        }
+
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>
             <FontAwesomeIcon icon={faClipboardList} /> Pre-designed Quizzes

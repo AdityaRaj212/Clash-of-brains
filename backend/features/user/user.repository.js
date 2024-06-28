@@ -20,7 +20,7 @@ export default class UserRepository{
     async signOut(userId){
         try{
             const user = await UserModel.findById(userId);
-            user.status = 'Offline';
+            console.log(user);
             return user;
         }catch(err){
             console.log('Error while loggin out');

@@ -64,9 +64,11 @@ export default class UserController{
 
     async signOut(req,res){
         try{
-            const userId = req.userId;
-            const user = this.userRepository.signOut(userId);
-            user?.status = 'Offline';
+            const userId = req.params.userId;
+            console.log(userId);
+            const user = await this.userRepository.signOut(userId);
+            user.status = 'Offline';
+            await user.save();
             pusher.trigger('users','user-logged-out',{
                 userId: userId
             })

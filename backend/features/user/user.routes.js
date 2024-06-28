@@ -13,7 +13,7 @@ router.post('/signIn', (req,res)=>{
     userController.signIn(req,res);
 });
 
-router.put('/signOut',(req,res)=>{
+router.put('/signOut/:userId',(req,res)=>{
     userController.signOut(req,res);
 })
 
