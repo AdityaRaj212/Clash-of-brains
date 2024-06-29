@@ -52,4 +52,19 @@ export default class UserRepository{
         const users = await UserModel.find({ status: 'Online' });
         return users;
     }
+
+    async updateScore(userId, updatedScore){
+        try{
+            const user = await UserModel.findById(userId);
+            if(user){
+                user.currentScore = updatedScore;
+                user.save();
+            }
+            return user;
+
+        }catch(err){
+            console.error('Error while updating user score: ' + err);
+            throw err;
+        }
+    }
 }

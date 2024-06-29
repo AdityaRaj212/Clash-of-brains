@@ -32,6 +32,7 @@ const AdminPanel = () => {
         return () => {
             channel.unbind_all();
             channel.unsubscribe();
+            // pusher.disconnect();
         };
     }, []);
 

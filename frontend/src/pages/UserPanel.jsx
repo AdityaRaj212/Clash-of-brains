@@ -56,6 +56,7 @@ const UserPanel = () => {
     return () => {
       channel.unbind_all();
       channel.unsubscribe();
+      // pusher.disconnect();
   };
   },[]);
 
@@ -72,7 +73,7 @@ const UserPanel = () => {
   }
 
   const handleLogin = ()=>{
-    navigate('/authentication');
+    navigate('/');
   }
 
   return (

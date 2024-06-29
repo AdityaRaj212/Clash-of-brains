@@ -43,6 +43,10 @@ const UserSchema = new mongoose.Schema({
     lastActive: {
         type: Date,
         default: Date.now(),
+    },
+    currentScore: {
+        type: Number,
+        default: 0,
     }
 });
 

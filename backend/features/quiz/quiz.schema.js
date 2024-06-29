@@ -24,6 +24,16 @@ const QuizSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now()
+    },
+    players: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ],
+    locked: {
+        type: Boolean,
+        default: false,
     }
 });
 

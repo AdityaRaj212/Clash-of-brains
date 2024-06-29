@@ -56,6 +56,26 @@ export default class QuizRepository{
         }
     }
 
+    async getActiveQuizzes(){
+        try{
+            const activeQuizzes = await QuizModel.find({locked:false});
+            return activeQuizzes;
+        }catch(err){
+            console.error('Error while fetching active quizzes: ' + err);
+            throw new Error(err);
+        }
+    }
+
+    async getQuizByPlayer(userId) {
+        try {
+            const quiz = await QuizModel.findOne({ players: userId });
+            return quiz;
+        } catch (err) {
+            console.log('Error while fetching quiz by player');
+            throw new Error('Error while fetching quiz by player');
+        }
+    }
+
     async deleteQuizById(quizId){
         try{
             const deletedQuiz = await QuizModel.findByIdAndDelete(quizId);

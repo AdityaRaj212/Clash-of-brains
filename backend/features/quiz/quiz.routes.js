@@ -5,7 +5,7 @@ const router = express.Router();
 
 const quizController = new QuizController();
 
-router.post('/create', (req,res)=>{
+router.get('/create/:userId', (req,res)=>{
     quizController.createQuiz(req,res);
 });
 

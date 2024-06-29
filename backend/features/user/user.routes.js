@@ -13,6 +13,10 @@ router.post('/signIn', (req,res)=>{
     userController.signIn(req,res);
 });
 
+router.post('/update-score',(req,res)=>{
+    userController.updateScore(req,res);
+})
+
 router.put('/signOut/:userId',(req,res)=>{
     userController.signOut(req,res);
 })

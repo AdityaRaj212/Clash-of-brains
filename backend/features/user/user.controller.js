@@ -24,6 +24,7 @@ export default class UserController{
         const user = await this.userRepository.getUser(email,password);
         if(user){
             user.status = 'Online';
+            user.lastActive = Date.now();
             await user.save();
             const token = jwt.sign(
                 {
@@ -101,6 +102,27 @@ export default class UserController{
             status: true,
             users: users
         });
+    }
+
+    async updateScore(req,res){
+        const {userId, quizId, newScore} = req.body;
+        try{
+            const updatedUser = await this.userRepository.updateScore(userId,newScore);
+            pusher.trigger(`quiz-${quizId}`,'score-updated',{
+                userId,
+                newScore,
+            });
+            res.status(201).json({
+                status: true,
+                msg: 'Score-updated',
+                user: updatedUser,
+            })
+        }catch(err){
+            res.status(500).json({
+                status: false,
+                error: err.message,
+            })
+        }
     }
 
     async test(req,res){
