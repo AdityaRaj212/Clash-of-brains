@@ -13,7 +13,17 @@ export const connectUsingMongoose = async () => {
     try{
         await mongoose.connect(url);
         console.log('MongoDB is connected using mongoose');
+        // await dropIndex();
     }catch(err){
         console.log('Error while connecting to DB: ' + err);
     }
 }
+
+// export const dropIndex = async () => {
+//     try {
+//         const result = await mongoose.connection.db.collection('quizzes').dropIndex('players_1');
+//         console.log('Index dropped:', result);
+//     } catch (err) {
+//         console.log('Error dropping index:', err.message);
+//     }
+// };

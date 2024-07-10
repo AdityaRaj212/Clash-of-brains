@@ -43,4 +43,6 @@ const QuizSchema = new mongoose.Schema({
     },
 });
 
+QuizSchema.index({ players: 1 }, { unique: false });
+
 export const QuizModel = mongoose.model('Quiz',QuizSchema);

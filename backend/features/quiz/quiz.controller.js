@@ -12,29 +12,17 @@ export default class QuizController {
         const userId = req.params.userId;
 
         try {
-            // Check if the user is already in a quiz
-            // const existingQuiz = await this.quizRepository.getQuizByPlayer(userId);
-            // if (existingQuiz) {
-            //     return res.status(400).json({
-            //         status: false,
-            //         message: 'User is already in an existing quiz.', // Add this check to prevent duplicate quizzes
-            //     });
-            // }
-
-            // Atomic operation to check and add user to the queue
-            // console.log(matchMakingQueue);
-
             if (!matchMakingQueue.includes(userId)) {
                 matchMakingQueue.enqueue(userId);
             } 
-            // else {
-            //     console.log('in');
-            //     console.log('Same user found');
-            //     return res.status(200).json({
-            //         status: false,
-            //         message: 'User is already in the queue.',
-            //     });
-            // }
+            else {
+                console.log('in');
+                console.log('Same user found');
+                return res.status(200).json({
+                    status: false,
+                    message: 'User is already in the queue.',
+                });
+            }
             console.log('out');
 
 
@@ -46,17 +34,17 @@ export default class QuizController {
                 let quiz;
                 const activeQuizzes = await this.quizRepository.getActiveQuizzes();
 
-                if (activeQuizzes.length > 0) {
-                    quiz = activeQuizzes[0];
-                    quiz.locked = true;
-                    quiz.players.push(user1, user2);
-                    await quiz.save();
-                } else {
+                // if (activeQuizzes.length > 0) {
+                //     quiz = activeQuizzes[0];
+                //     quiz.locked = true;
+                //     quiz.players.push(user1, user2);
+                //     await quiz.save();
+                // } else {
                     quiz = await this.quizRepository.createQuiz(no_of_questions);
                     quiz.players.push(user1, user2);
                     quiz.locked = true;
                     await quiz.save();
-                }
+                // }
 
                 // Notify users about the new quiz
                 pusher.trigger('quiz', 'new-quiz', {
