@@ -14,7 +14,7 @@ const server = express();
 server.use(express.urlencoded({extended: true}));
 server.use(cors());
 server.use(bodyParser.json());
-server.use(cookieParser());
+server.use(cookieParser());0
 server.use(session({
     secret: 'aditya_quizapp',
     resave: false,
