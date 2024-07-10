@@ -7,6 +7,7 @@ import Pusher from 'pusher-js';
 import { AuthContext } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const QuizPage = () => {
     const { quizId } = useParams();
@@ -22,6 +23,11 @@ const QuizPage = () => {
     const [user1Finished, setUser1Finished] = useState(false);
     const [user2Finished, setUser2Finished] = useState(false);
     const [loading, setLoading] = useState(true);
+
+    const [maxTime, setMaxTime] = useState(30);
+    const [maxPoints, setMaxPoints] = useState(1);
+    const [timer, setTimer] = useState(maxTime);
+    const [timeLeftPercentage, setTimeLeftPercentage] = useState(100);
 
     useEffect(() => {
         const fetchQuiz = async () => {
@@ -67,26 +73,28 @@ const QuizPage = () => {
         fetchQuiz();
     }, [quizId]);
 
+    useEffect(()=>{
+        if (currentQuestionIndex < quiz.questionIds.length - 1){
+            const questionId = quiz.questionIds[currentQuestionIndex];
+            
+            const fetchQuestion = async ()=>{
+                const questionResponse = await axios.get(`/api/question/get-by-id/${questionId}`);
+                const question = questionResponse.data.question;
+
+                console.log(question.points);
+                console.log(question.time);
+
+                setMaxPoints(question.points);
+                setMaxTime(question.time);
+                setTimer(question.time);
+                setTimeLeftPercentage(100);
+            }
+
+            fetchQuestion();
+        }
+    },[currentQuestionIndex])
+
     useEffect(() => {
-
-        // const fetchQuizInfo = async()=>{
-        //     const quizResponse = await axios.get(`/api/quiz/get-by-id/${quizId}`);
-        //     const fetchedQuiz = quizResponse.data.quiz;
-    
-        //     const user1Id = fetchedQuiz.players[0];
-        //     const user2Id = fetchedQuiz.players[1];
-    
-        //     const user1Response = await axios.get(`/api/users/get-user-by-id/${user1Id}`);
-        //     const user2Response = await axios.get(`/api/users/get-user-by-id/${user2Id}`);
-        //     setUser1(user1Response.data.user);
-        //     setUser2(user2Response.data.user);
-    
-        //     setScore1(user1Response.data.user.currentScore);
-        //     setScore2(user2Response.data.user.currentScore);
-        // }
-
-        // fetchQuizInfo();
-
         const pusher = new Pusher("cee81b1a4f2e2de34ad5", {
             cluster: "ap2"
         });
@@ -125,6 +133,18 @@ const QuizPage = () => {
             navigate(`/result/${quizId}`);
         }
     }, [user1Finished, user2Finished, quizId]);
+
+    useEffect(() => {
+        if (timer > 0) {
+            const countdown = setTimeout(() => {
+                setTimer(timer - 0.01);
+            }, 10);
+            setTimeLeftPercentage((timer*100)/maxTime);
+            return () => clearTimeout(countdown);
+        } else {
+            handleNextQuestion();
+        }
+    }, [timer]);
 
     const endQuiz= ()=>{
         // Set a timeout for 10 seconds
@@ -205,6 +225,10 @@ const QuizPage = () => {
                         {score1}
                     </div>
                 </div>
+
+                <div className={styles.questionInfo}>
+                </div>
+
                 <div className={styles.userInfo}>
                     <div className={styles.userName}>
                         {user2.userName}
@@ -221,6 +245,7 @@ const QuizPage = () => {
                         questionId={quiz.questionIds[currentQuestionIndex]}
                         updateScore={quiz.players[0] === user._id ? updateScore1 : updateScore2}
                         currentScore={quiz.players[0] === user._id ? score1 : score2}
+                        maxPoints = {maxPoints}
                     />
                 )}
             </div>
@@ -231,6 +256,16 @@ const QuizPage = () => {
             <button className={styles.nextButton} onClick={handlePrevQuestion}>
                 Prev
             </button>
+
+            <div className={styles.timerContainer}>
+                <div className={styles.timer}
+                    style={{
+                        width:  `${timeLeftPercentage}%`
+                    }}
+                >
+
+                </div>
+            </div>
       
         <ToastContainer />
 

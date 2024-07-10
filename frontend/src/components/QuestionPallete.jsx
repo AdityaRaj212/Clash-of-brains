@@ -3,7 +3,7 @@ import axios from 'axios';
 import styles from './QuestionPallete.module.css';
 import { AuthContext } from '../context/AuthContext';
 
-const QuestionPallete = ({ questionId, updateScore, currentScore }) => {
+const QuestionPallete = ({ questionId, updateScore, currentScore, maxPoints }) => {
     const {user} = useContext(AuthContext);
 
     const [question, setQuestion] = useState(null);
@@ -52,7 +52,7 @@ const QuestionPallete = ({ questionId, updateScore, currentScore }) => {
                         questionId
                     })
     
-                    updateScore(currentScore+1);
+                    updateScore(currentScore+maxPoints);
                     setFeedback('correct');
                 } else {
                     updateScore(currentScore);

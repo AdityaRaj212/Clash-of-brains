@@ -16,6 +16,12 @@
     margin-bottom: 20px;
 }
 
+.questionInfo{
+    display: flex;
+    flex-direction: column;
+    width: 10rem;
+}
+
 .userInfo {
     display: flex;
     flex-direction: column;
@@ -56,4 +62,16 @@
 
 .nextButton:hover {
     background-color: #04c5b8;
+}
+
+.timerContainer {
+    width: 100%;
+    background-color: black;
+    height: 20px;
+    margin-top: 10px;
+}
+
+.timer {
+    background-color: #28a745;
+    height: 100%;
 }
