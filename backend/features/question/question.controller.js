@@ -79,6 +79,42 @@ export default class QuestionController{
         }
     }
 
+    async updateAttemptedBy(req,res){
+        const {userId, questionId} = req.body;
+        try{
+            const updatedQuestion = await this.questionRepository.updateAttemptedBy(userId, questionId);
+            res.status(201).json({
+                status: true,
+                msg: 'Updated attempted by',
+                question: updatedQuestion,
+            })
+        }catch(err){    
+            res.status(500).json({
+                status: false,
+                msg: 'Error while updating attempted by',
+                error: err.message,
+            })
+        }
+    }
+
+    async updateSolvedBy(req,res){
+        const {userId, questionId} = req.body;
+        try{
+            const updatedQuestion = await this.questionRepository.updateSolvedBy(userId, questionId);
+            res.status(201).json({
+                status: true,
+                msg: 'Updated solved by',
+                question: updatedQuestion,
+            })
+        }catch(err){    
+            res.status(500).json({
+                status: false,
+                msg: 'Error while updating solved by',
+                error: err.message,
+            })
+        }
+    }
+
     async deleteQuestionById(req,res){
         const questionId = req.params.questionId;
         const deletedQuestion = await this.questionRepository.deleteQuestionById(questionId);

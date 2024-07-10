@@ -34,9 +34,12 @@ const WaitingPage = () => {
             createQuiz();
         }
 
-        const pusher = new Pusher("9ab1a8af120cfd1dbc4f", {
+        const pusher = new Pusher("cee81b1a4f2e2de34ad5", {
             cluster: "ap2"
         });
+        // const pusher = new Pusher("9ab1a8af120cfd1dbc4f", {
+        //     cluster: "ap2"
+        // });
         const channel = pusher.subscribe('quiz');
 
         // setPusherInstance(pusher); // Save the pusher instance

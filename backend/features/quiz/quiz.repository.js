@@ -76,6 +76,25 @@ export default class QuizRepository{
         }
     }
 
+    async updateAttemptedBy(userId,quizId){
+        try{
+            const quiz = await QuizModel.findByIdAndUpdate(
+                quizId,
+                { $addToSet: { attemptedBy: userId } }, 
+                { new: true } 
+            );
+            
+            if (!quiz) {
+                throw new Error('Quiz not found');
+            }
+            
+            return quiz;
+        }catch(err){
+            console.error('Error while updating attempted by: ' + err);
+            throw err;
+        }
+    }
+
     async deleteQuizById(quizId){
         try{
             const deletedQuiz = await QuizModel.findByIdAndDelete(quizId);

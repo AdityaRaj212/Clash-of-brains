@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import styles from './QuestionPallete.module.css';
+import { AuthContext } from '../context/AuthContext';
 
 const QuestionPallete = ({ questionId, updateScore, currentScore }) => {
+    const {user} = useContext(AuthContext);
+
     const [question, setQuestion] = useState(null);
     const [options, setOptions] = useState([]);
     const [questionText, setQuestionText] = useState('');
@@ -32,22 +35,38 @@ const QuestionPallete = ({ questionId, updateScore, currentScore }) => {
         fetchQuestion();
     }, [questionId]);
 
-    const handleOptionClick = (index) => {
+    const handleOptionClick = async (index) => {
         if (!isOptionLocked) {
             setSelectedOption(index);
             setIsOptionLocked(true);
-            if (index === answer) {
-                updateScore(currentScore+1);
-                setFeedback('correct');
-            } else {
-                updateScore(currentScore);
-                setFeedback('incorrect');
-            }
 
-            // Hide feedback after a delay
-            setTimeout(() => {
-                setFeedback(null);
-            }, 2000);
+            try{
+                await axios.put('/api/question/attempted-by',{
+                    userId: user._id,
+                    questionId
+                });
+    
+                if (index === answer) {
+                    await axios.put('/api/question/solved-by',{
+                        userId: user._id,
+                        questionId
+                    })
+    
+                    updateScore(currentScore+1);
+                    setFeedback('correct');
+                } else {
+                    updateScore(currentScore);
+                    setFeedback('incorrect');
+                }
+    
+                // Hide feedback after a delay
+                setTimeout(() => {
+                    setFeedback(null);
+                }, 2000);
+            }catch(err){
+                console.error('Error while handling option click');
+                throw err;
+            }
         }
     };
 

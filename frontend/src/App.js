@@ -7,6 +7,7 @@ import QuestionPage from './pages/QuestionPage';
 import UserPanel from './pages/UserPanel';
 import WaitingPage from './pages/WaitingPage';
 import QuizPage from './pages/QuizPage';
+import ResultPage from './pages/ResultPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/question-page/:questionId" element={<QuestionPage/>}/>
         <Route path="/quiz-waiting-lobby" element={<WaitingPage/>}/>
         <Route path="/quiz/:quizId" element={<QuizPage/>}/>
+        <Route path="/result/:quizId" element={<ResultPage/>} />
       </Routes>
     </Router>
   );

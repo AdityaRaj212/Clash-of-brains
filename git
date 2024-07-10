@@ -1,0 +1,35 @@
+[33mcommit 13eb977e3d99084bd9d1d59ec5cff9ccfa840eac[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Aditya Raj <adityaraj@pop-os.localdomain>
+Date:   Sat Jun 29 19:11:50 2024 +0530
+
+    added waiting page and quiz page
+
+[33mcommit 78d2d0c95f2665c2872773f8f206a1b3d59a89f8[m
+Author: Aditya Raj <adityaraj@pop-os.localdomain>
+Date:   Fri Jun 28 13:23:26 2024 +0530
+
+    rectified login issue
+
+[33mcommit 9882b84c2bf8793de702e796e4baab699184bb56[m
+Author: Aditya Raj <adityaraj@pop-os.localdomain>
+Date:   Fri Jun 28 11:37:28 2024 +0530
+
+    added user-panel
+
+[33mcommit 351b6df7acdbb7c1b617c377fc6f1d3ebce9f4af[m
+Author: Aditya Raj <adityaraj@pop-os.localdomain>
+Date:   Mon Jun 24 16:59:34 2024 +0530
+
+    added pusher, question update and delete option
+
+[33mcommit cb1fdc1ca5cf02e1b73e822699788b2f39e19c81[m
+Author: Aditya Raj <adityaraj@pop-os.localdomain>
+Date:   Sun Jun 23 18:13:49 2024 +0530
+
+    added signUp, signIn and creating question logic and frontend part
+
+[33mcommit e74a8402b6bbc5dbbc398094ec85f2488d1eaae2[m[33m ([m[1;32mmaster[m[33m)[m
+Author: Aditya Raj <adityaraj@pop-os.localdomain>
+Date:   Fri Jun 21 21:17:55 2024 +0530
+
+    base structure created with backend logic

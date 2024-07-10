@@ -50,6 +50,44 @@ export default class QuestionRepository{
         }
     }
 
+    async updateAttemptedBy(userId, questionId){
+        try{
+            const question = await QuestionModel.findByIdAndUpdate(
+                questionId,
+                { $addToSet: { attemptedBy: userId } }, 
+                { new: true } 
+            );
+            
+            if (!question) {
+                throw new Error('Question not found');
+            }
+            
+            return question;
+        }catch(err){
+            console.error('Error while updating attempted by: ' + err);
+            throw err;
+        }
+    }
+
+    async updateSolvedBy(userId, questionId){
+        try{
+            const question = await QuestionModel.findByIdAndUpdate(
+                questionId,
+                { $addToSet: { solvedBy: userId } }, 
+                { new: true } 
+            );
+            
+            if (!question) {
+                throw new Error('Question not found');
+            }
+            
+            return question;
+        }catch(err){
+            console.error('Error while updating solved by: ' + err);
+            throw err;
+        }
+    }
+
     async deleteQuestionById(questionId){
         try{
             const deletedQuestion = await QuestionModel.findByIdAndDelete(questionId);

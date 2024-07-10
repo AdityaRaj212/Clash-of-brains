@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const QuizSchema = new mongoose.Schema({
     questionIds: [
@@ -31,10 +31,16 @@ const QuizSchema = new mongoose.Schema({
             ref: 'User',
         }
     ],
+    scores: [
+        {
+            type: Number,
+            default: 0,
+        }
+    ],
     locked: {
         type: Boolean,
         default: false,
-    }
+    },
 });
 
 export const QuizModel = mongoose.model('Quiz',QuizSchema);

@@ -21,6 +21,14 @@ router.put('/update/:questionId',(req,res)=>{
     questionController.updateQuestion(req,res);
 });
 
+router.put('/attempted-by',(req,res)=>{
+    questionController.updateAttemptedBy(req,res);
+});
+
+router.put('/solved-by',(req,res)=>{
+    questionController.updateSolvedBy(req,res);
+})
+
 router.delete('/delete/:questionId',(req,res)=>{
     questionController.deleteQuestionById(req,res);
 });

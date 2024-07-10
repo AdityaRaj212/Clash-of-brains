@@ -67,4 +67,8 @@ export default class UserRepository{
             throw err;
         }
     }
+
+    async resetScore(userId){
+        
+    }
 }

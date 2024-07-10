@@ -21,4 +21,12 @@ router.get('/delete/:quizId',(req,res)=>{
     quizController.deleteQuizById(req,res);
 });
 
+router.post('/end',(req,res)=>{
+    quizController.endQuiz(req,res);
+});
+
+router.post('/attempted-by',(req,res)=>{
+    quizController.updateAttemptedBy(req,res);
+})
+
 export default router;

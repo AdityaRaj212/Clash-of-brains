@@ -39,9 +39,12 @@ const UserPanel = () => {
       console.error('There was an error fetching users online: ' + err);
     }
 
-    const pusher = new Pusher("9ab1a8af120cfd1dbc4f", {
+    const pusher = new Pusher("cee81b1a4f2e2de34ad5", {
       cluster: "ap2"
     });
+    // const pusher = new Pusher("9ab1a8af120cfd1dbc4f", {
+    //   cluster: "ap2"
+    // });
     const channel = pusher.subscribe('users');
     channel.bind('new-user', (data) => {
       setUsersOnline(prevUsers => [...prevUsers, data.user]);

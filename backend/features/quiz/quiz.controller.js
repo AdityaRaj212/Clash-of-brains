@@ -133,6 +133,24 @@ export default class QuizController {
         }
     }
 
+    async updateAttemptedBy(req,res){
+        const {userId, quizId} = req.body;
+        try{
+            const updatedQuiz = await this.quizRepository.updateAttemptedBy(userId, quizId);
+            res.status(201).json({
+                status: true,
+                msg: 'Updated attempted by in quiz',
+                quiz: updatedQuiz,
+            })
+        }catch(err){
+            res.status(500).json({
+                status: false,
+                message: 'Failed to update attempted by in quiz',
+                error: err.message,
+            });
+        }
+    }
+
     async deleteQuizById(req, res) {
         const quizId = req.params.quizId;
         try {
@@ -148,5 +166,17 @@ export default class QuizController {
                 error: err.message,
             });
         }
+    }
+
+    endQuiz(req,res){
+        const {quizId, userId} = req.body;
+        pusher.trigger(`quiz-${quizId}`,'end-quiz',{
+            quizId,
+            userId
+        });
+        res.status(200).json({
+            status: true,
+            msg: 'End quiz'
+        })
     }
 }
