@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Navigate to the front-end directory and install dependencies
-cd front-end
+cd frontend
 npm install
 
 # Build the front-end
@@ -11,5 +11,5 @@ npm run build
 cd ..
 
 # Navigate to the back-end directory and install dependencies
-cd back-end
+cd backend
 npm install
