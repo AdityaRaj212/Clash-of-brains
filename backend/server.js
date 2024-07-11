@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import cors from 'cors';
+import path from 'path';
+
 import { connectUsingMongoose } from './config/mongoose.js';
 
 import userRouter from './features/user/user.routes.js';
@@ -22,9 +24,16 @@ server.use(session({
     cookie: {secure:false}
 }));
 
+// Serve static files from the frontend build directory
+server.use(express.static(path.join(__dirname, '../frontend/build')));
+
 server.use('/api/users', userRouter);
 server.use('/api/question',questionRouter);
 server.use('/api/quiz',quizRouter);
+
+server.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
 
 server.listen(3400,()=>{
     console.log('Server is up and running at 3400');
