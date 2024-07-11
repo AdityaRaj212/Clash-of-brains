@@ -1,17 +1,13 @@
 {
-  "name": "less-go_quiz-app",
+  "name": "clash-of-brains",
   "version": "1.0.0",
-  "main": "index.js",
-  
-    "scripts": {
-      "start": "react-scripts start",
-      "build": "react-scripts build",
-      "test": "react-scripts test",
-      "eject": "react-scripts eject"
-    }
-  ,
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "private": true,
+  "scripts": {
+    "install-all": "npm install --prefix frontend && npm install --prefix backend",
+    "build-all": "npm run build --prefix frontend && npm run build --prefix backend",
+    "start": "concurrently \"npm start --prefix backend\" \"serve -s frontend/build\""
+  },
+  "dependencies": {
+    "concurrently": "^6.3.0"
+  }
 }
