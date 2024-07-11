@@ -25,14 +25,14 @@ server.use(session({
 }));
 
 // Serve static files from the frontend build directory
-server.use(express.static(path.join(__dirname, '../frontend/build')));
+server.use(express.static(path.join(path.resolve(), '../frontend/build')));
 
 server.use('/api/users', userRouter);
 server.use('/api/question',questionRouter);
 server.use('/api/quiz',quizRouter);
 
 server.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+    res.sendFile(path.join(path.resolve(), '../frontend/build', 'index.html'));
 });
 
 server.listen(3400,()=>{
