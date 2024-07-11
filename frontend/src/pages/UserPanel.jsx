@@ -51,12 +51,29 @@ const UserPanel = () => {
   ];
 
   useEffect(() => {
-    if (user) {
-      setGamesPlayed(user.gamesPlayed);
-      setGamesWon(user.gamesWon);
-      setTotalScore(user.totalScore);
+    try{
+      const fetchUserDetails = async()=>{
+        if(user){
+          const userId = user._id;
+          const userResponse = await axios.get(`/api/users/get-user-by-id/${userId}`);
+          const userData = userResponse.data.user;
+          setGamesPlayed(userData.gamesPlayed);
+          setGamesWon(userData.gamesWon);
+          setTotalScore(userData.totalScore);
+        }
+      }
+      fetchUserDetails();
+      
+    }catch(err){
+      console.error('Error while fetching user details: ' + err);
+      throw err;
     }
-  }, [user]);
+    // if (user) {
+    //   setGamesPlayed(user.gamesPlayed);
+    //   setGamesWon(user.gamesWon);
+    //   setTotalScore(user.totalScore);
+    // }
+  }, []);
 
   useEffect(() => {
     try {

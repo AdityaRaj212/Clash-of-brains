@@ -121,7 +121,24 @@ export default class UserController{
             res.status(500).json({
                 status: false,
                 error: err.message,
+            });
+        }
+    }
+
+    async updateTotalScore(req,res){
+        const {userId, score} = req.body;
+        try{
+            const user = await this.userRepository.updateTotalScore(userId, score);
+            res.status(201).json({
+                status: true,
+                user,
+                msg: 'Total score updated successfully'
             })
+        }catch(err){
+            res.status(500).json({
+                status: false,
+                error: err.message,
+            });
         }
     }
 

@@ -68,6 +68,20 @@ export default class UserRepository{
         }
     }
 
+    async updateTotalScore(userId, score){
+        try{
+            const user = await UserModel.findById(userId);
+            if(user){
+                user.totalScore = user.totalScore + score;
+                user.save();
+            }
+            return user;
+        }catch(err){
+            console.error('Error while updating total score: ' + err);
+            throw err;
+        }
+    }
+
     async resetScore(userId){
         
     }

@@ -28,6 +28,8 @@ const QuizPage = () => {
     const [timer, setTimer] = useState(maxTime);
     const [timeLeftPercentage, setTimeLeftPercentage] = useState(100);
 
+    const [hasEnded, setHasEnded] = useState(false);
+
     useEffect(() => {
         const fetchQuiz = async () => {
             try {
@@ -111,14 +113,11 @@ const QuizPage = () => {
         });
 
         channel.bind('end-quiz', data => {
-            console.log(user);
-            // console.log(data);
-            if(user._id===data.userId){
-                toast.warning('This quiz will end in 10 seconds');
-                endQuiz();
-                // setTimeout(() => {
-                //     navigate(`/result/${quizId}`);
-                // }, 10000);
+            if (!hasEnded) { 
+                setHasEnded(true); 
+                if (user._id === data.userId) {
+                    endQuiz();
+                }
             }
         })
 
@@ -126,7 +125,7 @@ const QuizPage = () => {
             channel.unbind_all();
             channel.unsubscribe();
         };
-    }, [quizId, score1, score2]);
+    }, [quizId, score1, score2, hasEnded]);
 
     useEffect(() => {
         if (user1Finished && user2Finished) {
@@ -147,6 +146,7 @@ const QuizPage = () => {
     }, [timer]);
 
     const endQuiz= async ()=>{
+        toast.warning('This quiz will end in 10 seconds');
         const warnResponse = await axios.post('/api/quiz/warn',{
             quizId,
             userId: (user._id===user1._id) ? user2._id : user1._id
@@ -180,8 +180,6 @@ const QuizPage = () => {
                 //     quizId,
                 //     userId: toSendUserId
                 // });
-
-                toast.warning('This quiz will end in 10 seconds');
 
                 endQuiz();
             }   

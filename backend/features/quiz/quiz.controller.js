@@ -1,10 +1,12 @@
 import QuizRepository from "./quiz.repository.js";
 import matchMakingQueue from './../../config/queue.js';
 import pusher from "../../config/pusher.js";
+import UserRepository from "../user/user.repository.js";
 
 export default class QuizController {
     constructor() {
         this.quizRepository = new QuizRepository();
+        this.userRepository = new UserRepository();
     }
 
     async createQuiz(req, res) {
@@ -199,6 +201,13 @@ export default class QuizController {
         const {quizId, userId} = req.body;
         try{
             const quiz = await this.quizRepository.updateHighestScore(quizId);
+
+            const playerId1 = quiz.players[0];
+            const playerId2 = quiz.players[1];
+
+            await this.userRepository.updateTotalScore(playerId1, quiz.scores[0]);
+            await this.userRepository.updateTotalScore(playerId2, quiz.scores[1]);
+
             res.status(200).json({
                 status: true,
                 msg: 'End quiz',
