@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "install-all": "npm install --prefix frontend && npm install --prefix backend",
-    "build-all": "npm run build --prefix frontend && npm run build --prefix backend",
-    "start": "concurrently \"npm start --prefix backend\" \"serve -s frontend/build\""
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "serve -s frontend/build",
+    "build": "npm run build --prefix frontend",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "concurrently": "^6.3.0"
