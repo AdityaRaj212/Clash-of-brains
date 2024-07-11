@@ -1,19 +1,22 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import Loading from "../pages/Loading";
 
 const AuthContext = createContext();
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    useEffect(()=>{ 
+    useEffect(() => {
         const token = localStorage.getItem('jwtToken');
-        if(token){
+        if (token) {
             const storedUser = JSON.parse(localStorage.getItem('userInfo'));
             setIsAuthenticated(true);
             setUser(storedUser);
         }
+        setLoading(false);
     }, []);
 
     const signIn = async (email, password) => {
@@ -32,14 +35,14 @@ const AuthProvider = ({children}) => {
     };
 
     const signOut = async () => {
-        try{
+        try {
             const response = await axios.put(`/api/users/signOut/${user._id}`);
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('userInfo');
             setIsAuthenticated(false);
             setUser(null);
-            return {success: true, user: response.user};
-        }catch(err){
+            return { success: true };
+        } catch (err) {
             console.log('Logout error: ' + err);
             return { success: false, message: err.response?.data?.msg || 'Logout failed' };
         }
@@ -47,7 +50,7 @@ const AuthProvider = ({children}) => {
 
     const signUp = async (name, userName, email, password) => {
         try {
-            const response = await axios.post('/api/users/signUp', { name, userName,  email, password });
+            const response = await axios.post('/api/users/signUp', { name, userName, email, password });
             const { user } = response.data;
             return { success: true };
         } catch (error) {
@@ -56,11 +59,15 @@ const AuthProvider = ({children}) => {
         }
     };
 
+    if (loading) {
+        return <Loading/>;
+    }
+
     return (
-        <AuthContext.Provider value={{isAuthenticated, user, signIn, signUp, signOut}}>
+        <AuthContext.Provider value={{ isAuthenticated, user, signIn, signUp, signOut }}>
             {children}
         </AuthContext.Provider>
-    )
+    );
 };
 
-export {AuthProvider, AuthContext};
+export { AuthProvider, AuthContext };

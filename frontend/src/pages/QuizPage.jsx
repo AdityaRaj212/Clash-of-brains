@@ -7,14 +7,13 @@ import Pusher from 'pusher-js';
 import { AuthContext } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const QuizPage = () => {
     const { quizId } = useParams();
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
 
-    const [quiz, setQuiz] = useState({ questionIds: [], players: [] });
+    const [quiz, setQuiz] = useState({ questionIds: [], players: [], scores:[] });
     const [user1, setUser1] = useState({ userName: '' });
     const [user2, setUser2] = useState({ userName: '' });
     const [score1, setScore1] = useState(0);
@@ -116,9 +115,10 @@ const QuizPage = () => {
             // console.log(data);
             if(user._id===data.userId){
                 toast.warning('This quiz will end in 10 seconds');
-                setTimeout(() => {
-                    navigate(`/result/${quizId}`);
-                }, 10000);
+                endQuiz();
+                // setTimeout(() => {
+                //     navigate(`/result/${quizId}`);
+                // }, 10000);
             }
         })
 
@@ -146,9 +146,24 @@ const QuizPage = () => {
         }
     }, [timer]);
 
-    const endQuiz= ()=>{
+    const endQuiz= async ()=>{
+        const warnResponse = await axios.post('/api/quiz/warn',{
+            quizId,
+            userId: (user._id===user1._id) ? user2._id : user1._id
+        });
         // Set a timeout for 10 seconds
-        setTimeout(() => {
+        setTimeout(async() => {
+            const updateScoreResponse = await axios.post('/api/quiz/update-score',{
+                quizId,
+                userId: user._id,
+                score: (user._id===user1._id) ? score1 : score2,
+            })
+            const endQuizResponse = await axios.post('/api/quiz/end',{
+                quizId,
+                userId: (user._id===user1._id) ? user2._id : user1._id
+            });
+            console.log(updateScoreResponse);
+            console.log(endQuizResponse);
             navigate(`/result/${quizId}`);
         }, 10000);
     }
@@ -161,10 +176,10 @@ const QuizPage = () => {
                     toSendUserId = quiz.players[1];
                 }
 
-                const response = axios.post(`/api/quiz/end`,{
-                    quizId,
-                    userId: toSendUserId
-                });
+                // const response = axios.post(`/api/quiz/end`,{
+                //     quizId,
+                //     userId: toSendUserId
+                // });
 
                 toast.warning('This quiz will end in 10 seconds');
 

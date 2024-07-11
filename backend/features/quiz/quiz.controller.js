@@ -34,17 +34,26 @@ export default class QuizController {
                 let quiz;
                 const activeQuizzes = await this.quizRepository.getActiveQuizzes();
 
-                // if (activeQuizzes.length > 0) {
-                //     quiz = activeQuizzes[0];
-                //     quiz.locked = true;
-                //     quiz.players.push(user1, user2);
-                //     await quiz.save();
-                // } else {
+                if (activeQuizzes.length > 0) {
+                    quiz = activeQuizzes[0];
+                    quiz.locked = true;
+                    quiz.players.push(user1, user2);
+                    await quiz.save();
+                } else {
                     quiz = await this.quizRepository.createQuiz(no_of_questions);
                     quiz.players.push(user1, user2);
+                    
+                    if (!quiz.attemptedBy.includes(user1)) {
+                        quiz.attemptedBy.push(user1);
+                    }
+                    
+                    if (!quiz.attemptedBy.includes(user2)) {
+                        quiz.attemptedBy.push(user2);
+                    }
+
                     quiz.locked = true;
                     await quiz.save();
-                // }
+                }
 
                 // Notify users about the new quiz
                 pusher.trigger('quiz', 'new-quiz', {
@@ -156,7 +165,25 @@ export default class QuizController {
         }
     }
 
-    endQuiz(req,res){
+    async updateScore(req,res){
+        const {quizId, userId, score} = req.body;
+        try{
+            const quiz = await this.quizRepository.updateScore(quizId, userId, score);
+            res.status(201).json({
+                status: true,
+                message: 'Score updated successfully',
+                quiz
+            })
+        }catch(err){
+            res.status(500).json({
+                status: false,
+                message: 'Failed to update score',
+                error: err.message,
+            });
+        }
+    }
+
+    async warnEnding(req,res){
         const {quizId, userId} = req.body;
         pusher.trigger(`quiz-${quizId}`,'end-quiz',{
             quizId,
@@ -164,7 +191,25 @@ export default class QuizController {
         });
         res.status(200).json({
             status: true,
-            msg: 'End quiz'
+            msg: 'Warn ending quiz'
         })
+    }
+
+    async endQuiz(req,res){
+        const {quizId, userId} = req.body;
+        try{
+            const quiz = await this.quizRepository.updateHighestScore(quizId);
+            res.status(200).json({
+                status: true,
+                msg: 'End quiz',
+                quiz
+            })
+        }catch(err){
+            res.status(500).json({
+                status: false,
+                message: 'Failed to update highest score',
+                error: err.message,
+            });
+        }
     }
 }

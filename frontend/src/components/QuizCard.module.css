@@ -1,0 +1,120 @@
+:root {
+  --background-color: #121212;
+  --primary-color: #bb86fc;
+  --secondary-color: #03dac6;
+  --text-color: #ffffff;
+  --card-background-color: #1e1e1e;
+  --border-color: #333333;
+  --hover-scale: 1.02;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --avatar-size: 50px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--background-color);
+}
+
+.quizCard {
+  background-color: var(--card-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative; /* Ensure playerCard is positioned relative to quizCard */
+}
+
+.quizCard:hover {
+  transform: scale(var(--hover-scale));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.quizTitle {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.quizDetails {
+  color: var(--text-color);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.playerCard {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+  background-color: var(--secondary-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: transform 0.3s ease-in-out; /* Smooth transition for animations */
+}
+
+.profileImage img {
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.profileImage img:hover {
+  transform: scale(1.1);
+}
+
+.userName {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.score {
+  margin-bottom: 5px;
+}
+
+.quizInfoCard {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.quizInfoCard p {
+  margin: 5px 0;
+}
+
+/* Animation keyframes for fighting effect */
+@keyframes fightAnimation {
+  0% {
+      transform: translate(0, 0);
+  }
+  25% {
+      transform: translate(5px, -5px);
+  }
+  50% {
+      transform: translate(-5px, 5px);
+  }
+  75% {
+      transform: translate(5px, 5px);
+  }
+  100% {
+      transform: translate(0, 0);
+  }
+}
+
+.fighting {
+  animation: none; /* Initially no animation */
+}
+
+.quizCard:hover .fighting {
+  animation: fightAnimation 0.5s ease-in-out infinite; /* Apply animation on hover */
+}

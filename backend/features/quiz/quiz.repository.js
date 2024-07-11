@@ -1,5 +1,6 @@
 import { QuizModel } from "./quiz.schema.js";
 import { QuestionModel } from "./../question/question.schema.js";
+import axios from "axios";
 
 const getRandomQuestions = async (no_of_questions) => {
     try{
@@ -18,11 +19,21 @@ export default class QuizRepository{
     async createQuiz(no_of_questions){
         try{
             const questionIds = await getRandomQuestions(no_of_questions);
+            let maxScore = 0;
+            
+            for (const questionId of questionIds) {
+                const question = await QuestionModel.findById(questionId);
+                if (question) {
+                    maxScore += question.points;
+                }
+            }
+
             const newQuiz = new QuizModel({
                 questionIds: questionIds,
                 attemptedBy: [],
-                totalScore: 0,
+                totalScore: maxScore,
                 highestScore: 0,
+                scores: [0,0],
                 createdAt: Date.now()
             });
             await newQuiz.save();
@@ -48,7 +59,7 @@ export default class QuizRepository{
 
     async getAllQuizzes(){
         try{
-            const quizzes = await QuestionModel.find();
+            const quizzes = await QuizModel.find();
             return quizzes;
         }catch(err){
             console.log('Error while fetching quizzes');
@@ -91,6 +102,34 @@ export default class QuizRepository{
             return quiz;
         }catch(err){
             console.error('Error while updating attempted by: ' + err);
+            throw err;
+        }
+    }
+
+    async updateScore(quizId, userId, score){
+        try{
+            const quiz = await QuizModel.findById(quizId);
+            if(quiz.players[0]==userId){
+                quiz.scores[0] = score;
+            }else{
+                quiz.scores[1] = score;
+            }
+            await quiz.save();
+            return quiz;
+        }catch(err){
+            console.error('Error while updating score: ' + err);
+            throw err;
+        }
+    }
+
+    async updateHighestScore(quizId){
+        const quiz = await QuizModel.findById(quizId);
+        try{
+            quiz.highestScore = (quiz.scores[0]>quiz.scores[1]) ? quiz.scores[0] : quiz.scores[1];
+            await quiz.save();
+            return quiz;
+        }catch(err){
+            console.error('Error while updating highest score: ' + err);
             throw err;
         }
     }

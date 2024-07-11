@@ -21,6 +21,14 @@ router.get('/delete/:quizId',(req,res)=>{
     quizController.deleteQuizById(req,res);
 });
 
+router.post('/update-score',(req,res)=>{
+    quizController.updateScore(req,res);
+});
+
+router.post('/warn',(req,res)=>{
+    quizController.warnEnding(req,res);
+})
+
 router.post('/end',(req,res)=>{
     quizController.endQuiz(req,res);
 });

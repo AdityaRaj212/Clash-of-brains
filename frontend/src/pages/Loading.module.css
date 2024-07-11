@@ -1,0 +1,57 @@
+/* Loading.module.css */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #121212;
+    color: #ffffff;
+  }
+  
+  .brain {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+  
+  .brainPart1, .brainPart2 {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 8px solid #61dafb;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  
+  .brainPart2 {
+    transform: translateX(60px);
+  }
+  
+  .loadingText {
+    margin-top: 20px;
+    font-size: 2rem;
+    color: #61dafb;
+  }
+  
+  .subText {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #999999;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
