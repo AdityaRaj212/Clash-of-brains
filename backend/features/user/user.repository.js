@@ -82,6 +82,44 @@ export default class UserRepository{
         }
     }
 
+    async updateGamesPlayed(userId){
+        try{
+            const user = await UserModel.findById(userId);
+            if(user){
+                user.gamesPlayed = user.gamesPlayed + 1;
+                user.save();
+            }
+            return user;
+        }catch(err){
+            console.error('Error while updating no of games played: ' + err);
+            throw err;
+        }
+    }
+
+    async updateGamesWon(userId){
+        try{
+            const user = await UserModel.findById(userId);
+            if(user){
+                user.gamesWon = user.gamesWon + 1;
+                user.save();
+            }
+            return user;
+        }catch(err){
+            console.error('Error while updating no of games won: ' + err);
+            throw err;
+        }
+    }
+
+    async getUsersForLeaderboard(){
+        try{
+            const users = await UserModel.find().sort({totalScore:-1});
+            return users;
+        }catch(err){
+            console.error('Error while getting users for leaderboard: ' + err);
+            throw err;
+        }
+    }
+
     async resetScore(userId){
         
     }

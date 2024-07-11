@@ -138,6 +138,24 @@ export default class UserController{
             res.status(500).json({
                 status: false,
                 error: err.message,
+                msg: 'Failed to update total score'
+            });
+        }
+    }
+
+    async getUsersForLeaderboard(req,res){
+        try{
+            const users = await this.userRepository.getUsersForLeaderboard();
+            res.status(200).json({
+                status: true,
+                msg: 'Successfully extracted users for leaderboard',
+                users
+            });
+        }catch(err){
+            res.status(500).json({
+                status: false,
+                error: err.message,
+                msg: 'Failed to fetch users for leaderboard'
             });
         }
     }

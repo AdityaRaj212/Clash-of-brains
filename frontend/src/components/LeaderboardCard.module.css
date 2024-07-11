@@ -1,0 +1,36 @@
+.card {
+    display: flex;
+    align-items: center;
+    background-color: #2c2c2c;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .profileImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+  
+  .userInfo {
+    color: #fff;
+  }
+  
+  .userName {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .userStats {
+    margin: 5px 0;
+    font-size: 0.9em;
+  }
+  

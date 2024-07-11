@@ -33,6 +33,10 @@ router.get('/online',(req,res)=>{
     userController.getOnlineUsers(req,res);
 });
 
+router.get('/leaderboard',(req,res)=>{
+    userController.getUsersForLeaderboard(req,res);
+});
+
 export default router;
 
 

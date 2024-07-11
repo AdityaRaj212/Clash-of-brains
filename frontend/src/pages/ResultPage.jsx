@@ -10,6 +10,8 @@ const ResultPage = () => {
     const [quiz, setQuiz] = useState(null);
     const [winner, setWinner] = useState(null);
     const [isTie, setIsTie] = useState(false);
+    const [user1, setUser1] = useState({});
+    const [user2, setUser2] = useState({});
 
     useEffect(() => {
         const fetchQuiz = async () => {
@@ -21,6 +23,10 @@ const ResultPage = () => {
                 if (fetchedQuiz.players && fetchedQuiz.players.length >= 2) {
                     const user1Response = await axios.get(`/api/users/get-user-by-id/${fetchedQuiz.players[0]}`);
                     const user2Response = await axios.get(`/api/users/get-user-by-id/${fetchedQuiz.players[1]}`);
+
+                    setUser1(user1Response.data.user);
+                    setUser2(user2Response.data.user);
+
                     const score1 = user1Response.data.user.currentScore;
                     const score2 = user2Response.data.user.currentScore;
 
@@ -32,18 +38,6 @@ const ResultPage = () => {
                         setWinner(null);
                         setIsTie(true);
                     }
-
-                    // await axios.post(`/api/users/update-score`,{
-                    //     userId: fetchedQuiz.players[0],
-                    //     quizId,
-                    //     newScore: 0,
-                    // });
-
-                    // await axios.post(`/api/users/update-score`,{
-                    //     userId: fetchedQuiz.players[1],
-                    //     quizId,
-                    //     newScore: 0,
-                    // });
 
                     await axios.post('/api/quiz/attempted-by',{
                         userId: fetchedQuiz.players[0],

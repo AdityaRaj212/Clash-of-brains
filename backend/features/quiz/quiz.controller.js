@@ -208,6 +208,15 @@ export default class QuizController {
             await this.userRepository.updateTotalScore(playerId1, quiz.scores[0]);
             await this.userRepository.updateTotalScore(playerId2, quiz.scores[1]);
 
+            await this.userRepository.updateGamesPlayed(playerId1);
+            await this.userRepository.updateGamesPlayed(playerId2);
+
+            if(quiz.scores[0]>quiz.scores[1]){
+                await this.userRepository.updateGamesWon(playerId1);
+            }else if(quiz.scores[0]<quiz.scores[1]){
+                await this.userRepository.updateGamesWon(playerId2);
+            }
+
             res.status(200).json({
                 status: true,
                 msg: 'End quiz',

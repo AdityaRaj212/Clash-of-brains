@@ -20,6 +20,7 @@ import {
   Legend,
 } from 'chart.js';
 import QuizCard from '../components/QuizCard';
+import LeaderboardTable from '../components/LeaderboardTable'; // Import the new component
 
 // Register the components
 ChartJS.register(
@@ -39,6 +40,7 @@ const UserPanel = () => {
   const [gamesWon, setGamesWon] = useState(0);
   const [totalScore, setTotalScore] = useState(0);
   const [quizzes, setQuizzes] = useState([]);
+  const [usersForLeaderboard, setUsersForLeaderboard] = useState([]);
 
   // Dummy data
   const preDesignedQuizzes = [
@@ -68,12 +70,22 @@ const UserPanel = () => {
       console.error('Error while fetching user details: ' + err);
       throw err;
     }
-    // if (user) {
-    //   setGamesPlayed(user.gamesPlayed);
-    //   setGamesWon(user.gamesWon);
-    //   setTotalScore(user.totalScore);
-    // }
   }, []);
+
+  useEffect(()=>{
+    try{
+      const fetchUsers = async()=>{
+        const usersResponse = await axios.get('/api/users/leaderboard');
+        if(usersResponse){
+          setUsersForLeaderboard(usersResponse.data.users);
+        }
+      }
+      fetchUsers();
+    }catch(err){
+      console.error('Error while fetching users for leaderboard: ' + err);
+      throw err;
+    }
+  },[]);
 
   useEffect(() => {
     try {
@@ -218,21 +230,16 @@ const UserPanel = () => {
 
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>
-              <FontAwesomeIcon icon={faClipboardList} /> Pre-Designed Quizzes
+              <FontAwesomeIcon icon={faClipboardList} /> Leaderboard
             </h2>
             <div className={styles.quizList}>
-              {preDesignedQuizzes.map((quiz) => (
-                <div key={quiz.id} className={styles.quizCard}>
-                  <div className={styles.quizTitle}>{quiz.title}</div>
-                  <div className={styles.quizDescription}>{quiz.description}</div>
-                </div>
-              ))}
+              <LeaderboardTable users={usersForLeaderboard} />
             </div>
           </div>
 
           <div className={`${styles.section} ${styles.pastQuizzes}`}>
             <h2 className={styles.sectionTitle}>
-              <FontAwesomeIcon icon={faPlayCircle} /> Live Quizzes Played till now
+              <FontAwesomeIcon icon={faPlayCircle} /> Live Quizzes Played
             </h2>
             <div className={styles.quizList}>
               {quizzes.map((quiz)=>(
