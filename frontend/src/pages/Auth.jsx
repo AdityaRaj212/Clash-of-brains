@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Auth.module.css';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-
 import Alert from 'react-bootstrap/Alert';
-
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -34,8 +32,7 @@ const Auth = () => {
 
 const SignUp = ({ setIsSignUp }) => {
   const [error, setError] = useState(false);
-
-  const {signUp} = useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     userName: '',
@@ -54,19 +51,11 @@ const SignUp = ({ setIsSignUp }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    // try{
-    //   const response = await axios.post('/api/users/signUp',{name: form.name, userName: form.userName, email: form.email, password: form.password});
-    //   console.log(response);
-    //   // setIsSignUp(false);
-    // }catch(err){
-    //   console.log('Error while signing up user: ' + err);
-    // }
     const result = await signUp(form.name, form.userName, form.email, form.password);
-    if(result.success){
+    if (result.success) {
       setError(false);
       setIsSignUp(false);
-    }else{
+    } else {
       setError(true);
     }
     console.log('SignUp Form submitted:', form);
@@ -121,13 +110,13 @@ const SignUp = ({ setIsSignUp }) => {
 
 const SignIn = () => {
   const navigate = useNavigate();
-
   const [loginError, setLoginError] = useState(false);
-  const {signIn} = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     email: '',
-    password: ''
+    password: '',
+    role: 'user'
   });
 
   const handleChange = (e) => {
@@ -138,65 +127,81 @@ const SignIn = () => {
     });
   };
 
+  const handleRoleChange = (e) => {
+    setForm({
+      ...form,
+      role: e.target.value
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    // try{
-    //   const response = await axios.post('/api/users/signIn',{
-    //     email: form.email,
-    //     password: form.password
-    //   });
-    //   changeAuthState();
-    // }catch(err){
-    //   console.log('Error while signing up: ' + err);
-    // }
-    const result = await signIn(form.email, form.password);
+    const result = await signIn(form.email, form.password, form.role);
     console.log(result);
-    if(result.success){
+    if (result.success) {
       setLoginError(false);
-      navigate('/admin-panel');
-      // how to redirect to admin page after log in 
-    }else{
+      navigate(form.role === 'admin' ? '/admin-panel' : '/user-panel');
+    } else {
       setLoginError(true);
     }
-    
     console.log('SignIn Form submitted:', form);
   };
 
   return (
     <>
-    {
-      (loginError)
-      &&
-      (
+      {loginError && (
         <Alert variant='danger'>
           Invalid Credentials 
         </Alert>
-      )
-    }
-    <form onSubmit={handleSubmit}>
-      <div className={styles.formGroup}>
-        <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className={styles.formGroup}>
-        <label>Password</label>
-        <input
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <button type="submit" className={styles.authButton}>Sign In</button>
-    </form>
+      )}
+      <form onSubmit={handleSubmit}>
+        <div className={styles.formGroup}>
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label>Sign in as:</label>
+          <div className={styles.radioGroup}>
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="user"
+                checked={form.role === 'user'}
+                onChange={handleRoleChange}
+              />
+              User
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="admin"
+                checked={form.role === 'admin'}
+                onChange={handleRoleChange}
+              />
+              Admin
+            </label>
+          </div>
+        </div>
+        <button type="submit" className={styles.authButton}>Sign In</button>
+      </form>
     </>
   );
 };

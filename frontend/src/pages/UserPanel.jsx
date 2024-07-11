@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { GiBattleGear } from "react-icons/gi";
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -20,9 +21,9 @@ import {
   Legend,
 } from 'chart.js';
 import QuizCard from '../components/QuizCard';
-import LeaderboardTable from '../components/LeaderboardTable'; // Import the new component
+import LeaderboardTable from '../components/LeaderboardTable'; 
 
-// Register the components
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -35,6 +36,7 @@ ChartJS.register(
 const UserPanel = () => {
   const { user, isAuthenticated, signOut } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [userName, setUserName] = useState('Guest');
   const [usersOnline, setUsersOnline] = useState([]);
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [gamesWon, setGamesWon] = useState(0);
@@ -62,6 +64,8 @@ const UserPanel = () => {
           setGamesPlayed(userData.gamesPlayed);
           setGamesWon(userData.gamesWon);
           setTotalScore(userData.totalScore);
+
+          setUserName(user.userName);
         }
       }
       fetchUserDetails();
@@ -192,9 +196,6 @@ const UserPanel = () => {
         <h2 className={styles.sectionTitle}>
           <FontAwesomeIcon icon={faUsers} /> Users Online in Lobby
         </h2>
-        <Button variant="primary" onClick={handleStartQuiz}>
-          Start Quiz
-        </Button>
         <ul className={styles.userList}>
           {usersOnline.map((user, index) => (
             <li key={index} className={styles.userItem}>{user.userName}</li>
@@ -203,16 +204,29 @@ const UserPanel = () => {
       </div>
 
       <div className={styles.contentContainer}>
-        {isAuthenticated && (
-          <Button variant="danger" onClick={handleLogout}>
-            Logout
-          </Button>
-        )}
-        {!isAuthenticated && (
-          <Button variant="success" onClick={handleLogin}>
-            Login
-          </Button>
-        )}
+        <div className={styles.header}>
+          <div className={styles.startBtn}>
+            <button onClick={handleStartQuiz} className={`${styles.button} ${styles.startBtn}`}>
+              Enter Battleground <GiBattleGear />
+            </button>
+          </div>
+          
+          <div className={styles.greeting}>
+            <span className={styles.greetingText}>Ready to Clash Minds, {userName}!</span>
+          </div>
+
+          {isAuthenticated ? (
+            <div className={styles.logoutBtn}>
+              <button onClick={handleLogout} className={styles.button}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button onClick={handleLogin} className={styles.button}>
+              Login
+            </button>
+          )}
+        </div>
 
         <div className={styles.row1}>
           <div className={styles.section}>
