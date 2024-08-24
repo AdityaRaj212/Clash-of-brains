@@ -111,6 +111,20 @@ const WaitingPage = () => {
         }
     }, [user]);
 
+    useEffect(() => {
+    const warnUser = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', warnUser);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('beforeunload', warnUser);
+    };
+  }, []);
+
     return (
         <div className={styles.container}>
             <div className={styles.userSection}>

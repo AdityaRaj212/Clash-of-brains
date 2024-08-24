@@ -21,6 +21,11 @@
   color: var(--text-color);
 }
 
+.switchToAdminBtn{
+  position: absolute;
+  bottom: 1rem;
+}
+
 .usersOnlineContainer {
   width: 10rem;
   background-color: var(--card-background-color);

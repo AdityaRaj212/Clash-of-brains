@@ -7,17 +7,27 @@ import QuestionShowcase from '../components/QuestionShowcase';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const AdminPanel = () => {
+    const navigate = useNavigate();
     const [option, setOption] = useState(0);
 
-    const switchToQuestions = () => {
-        setOption(0);
-    };
+    // const switchToQuestions = () => {
+    //     setOption(0);
+    // };
 
-    const switchToQuizzes = () => {
-        setOption(1);
-    };
+    // const switchToQuizzes = () => {
+    //     setOption(1);
+    // };
+
+    const handleAddQuestion = () => {
+        navigate('/create-question');
+    }
+
+    const handleSwitchToUser = () => {
+        navigate('/user-panel');
+    }
 
     useEffect(() => {
         const pusher = new Pusher("cee81b1a4f2e2de34ad5", {
@@ -49,18 +59,18 @@ const AdminPanel = () => {
                     </div>
 
                     <div className={styles.options}>
-                        <Button variant={option === 0 ? "primary" : "outline-primary"} onClick={switchToQuestions}>
-                            Questions
-                        </Button>
-                        <Button variant={option === 1 ? "primary" : "outline-primary"} onClick={switchToQuizzes}>
-                            Quizzes
+                        <Button variant={option === 0 ? "primary" : "outline-primary"} onClick={handleAddQuestion}>
+                            Add Questions
                         </Button>
                     </div>
                 </div>
 
                 <div className={styles.mainContainer}>
                     <div className={styles.usersOnline}>
-                        <h3>Users Online: 5</h3>
+                        <Button variant='primary' onClick={handleSwitchToUser}>
+                            Switch to User
+                        </Button>
+                        {/* <h3>Users Online: 5</h3> */}
                     </div>
 
                     <div className={styles.content}>

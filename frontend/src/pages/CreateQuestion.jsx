@@ -13,8 +13,11 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const CreateQuestion = () => {
+    const navigate = useNavigate();
+
     const { user } = useContext(AuthContext);
 
     const [questionText, setQuestionText] = useState('');
@@ -43,6 +46,10 @@ const CreateQuestion = () => {
         }
         setOptions(newOptions);
     };
+
+    const handleBack = () => {
+        navigate('/admin-panel');
+    }
 
     const isValid = () => {
         
@@ -233,6 +240,9 @@ const CreateQuestion = () => {
                 </div>
                 
                 <div className={styles.btnContainer}>
+                    <Button variant="primary" onClick={handleBack}>
+                        Back
+                    </Button>
                     <Button variant="primary" type="submit">
                         Create Question
                     </Button>

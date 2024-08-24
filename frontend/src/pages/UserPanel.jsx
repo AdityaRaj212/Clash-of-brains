@@ -144,6 +144,10 @@ const UserPanel = () => {
     }
   };
 
+  const handleSwitchToAdmin = () => {
+    navigate('/admin-panel');
+  }
+
   const handleLogout = () => {
     signOut();
   };
@@ -201,6 +205,11 @@ const UserPanel = () => {
             <li key={index} className={styles.userItem}>{user.userName}</li>
           ))}
         </ul>
+        <div className={styles.switchToAdminBtn}>
+          <button onClick={handleSwitchToAdmin} className={`${styles.button}`}>
+                Switch to Admin
+          </button>
+        </div>
       </div>
 
       <div className={styles.contentContainer}>
