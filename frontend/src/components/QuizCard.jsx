@@ -32,6 +32,8 @@ const QuizCard = ({quiz}) => {
             setPlayer1(player1Response.data.user);
             setPlayer2(player2Response.data.user);
 
+            console.log(quiz, player2Id, player2Response.data.user);
+
             setPlayer1Avatar(getRandomAvatarUrl(player1Id));
             setPlayer2Avatar(getRandomAvatarUrl(player2Id));
 

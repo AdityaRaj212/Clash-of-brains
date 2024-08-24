@@ -61,6 +61,7 @@ const UserPanel = () => {
           const userId = user._id;
           const userResponse = await axios.get(`/api/users/get-user-by-id/${userId}`);
           const userData = userResponse.data.user;
+          console.log(userData);
           setGamesPlayed(userData.gamesPlayed);
           setGamesWon(userData.gamesWon);
           setTotalScore(userData.totalScore);
