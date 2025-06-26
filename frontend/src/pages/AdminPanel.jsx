@@ -1,86 +1,80 @@
 import { useEffect, useState } from 'react';
-import styles from './AdminPanel.module.css';
 import Pusher from 'pusher-js';
-
-import Button from 'react-bootstrap/Button';
 import QuestionShowcase from '../components/QuestionShowcase';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 
 const AdminPanel = () => {
-    const navigate = useNavigate();
-    const [option, setOption] = useState(0);
+  const navigate = useNavigate();
+  const [option, setOption] = useState(0);
 
-    // const switchToQuestions = () => {
-    //     setOption(0);
-    // };
+  const handleAddQuestion = () => {
+    navigate('/create-question');
+  };
 
-    // const switchToQuizzes = () => {
-    //     setOption(1);
-    // };
+  const handleSwitchToUser = () => {
+    navigate('/user-panel');
+  };
 
-    const handleAddQuestion = () => {
-        navigate('/create-question');
-    }
+  useEffect(() => {
+    const pusher = new Pusher("cee81b1a4f2e2de34ad5", {
+      cluster: "ap2"
+    });
 
-    const handleSwitchToUser = () => {
-        navigate('/user-panel');
-    }
+    const channel = pusher.subscribe('questions');
+    channel.bind('new-question', () => {
+      toast.success('A new question has been added');
+    });
 
-    useEffect(() => {
-        const pusher = new Pusher("cee81b1a4f2e2de34ad5", {
-            cluster: "ap2"
-        });
-        // const pusher = new Pusher("9ab1a8af120cfd1dbc4f", {
-        //     cluster: "ap2"
-        // });
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, []);
 
-        const channel = pusher.subscribe('questions');
-        channel.bind('new-question', (data) => {
-            toast.success('A new question has been added');
-        });
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-pink-50 to-yellow-50 flex flex-col">
+      <ToastContainer />
+      {/* Header */}
+      <header className="w-full py-6 px-4 md:px-12 flex items-center justify-between bg-white/80 backdrop-blur-md shadow-lg rounded-b-3xl">
+        <div className="flex items-center gap-3">
+          <h1 className="font-extrabold text-3xl bg-gradient-to-r from-blue-500 via-pink-400 to-yellow-400 bg-clip-text text-transparent tracking-tight">
+            Admin Panel
+          </h1>
+        </div>
+        <div className="flex gap-4">
+          <button
+            onClick={handleAddQuestion}
+            className={`px-5 py-2 rounded-full text-white font-semibold shadow 
+              ${option === 0
+                ? 'bg-gradient-to-r from-blue-500 to-pink-400'
+                : 'bg-gradient-to-r from-gray-300 to-gray-400 text-gray-700'
+              } hover:scale-105 transition-transform`}
+          >
+            Add Question
+          </button>
+        </div>
+      </header>
 
-        return () => {
-            channel.unbind_all();
-            channel.unsubscribe();
-            // pusher.disconnect();
-        };
-    }, []);
-
-    return (
-        <>
-            <div className={styles.container}>
-
-                <div className={styles.header}>
-                    <div className={styles.logo}>
-                        <h1>Admin Panel</h1>
-                    </div>
-
-                    <div className={styles.options}>
-                        <Button variant={option === 0 ? "primary" : "outline-primary"} onClick={handleAddQuestion}>
-                            Add Questions
-                        </Button>
-                    </div>
-                </div>
-
-                <div className={styles.mainContainer}>
-                    <div className={styles.usersOnline}>
-                        <Button variant='primary' onClick={handleSwitchToUser}>
-                            Switch to User
-                        </Button>
-                        {/* <h3>Users Online: 5</h3> */}
-                    </div>
-
-                    <div className={styles.content}>
-                        <QuestionShowcase />
-                    </div>
-                </div>
-            </div>
-            <ToastContainer />
-        </>
-    );
+      {/* Main Content */}
+      <main className="flex-1 w-full max-w-6xl mx-auto px-4 md:px-8 py-8 flex flex-col gap-8">
+        {/* Switch to user panel */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={handleSwitchToUser}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full font-semibold shadow transition"
+          >
+            Switch to User
+          </button>
+        </div>
+        {/* Question Showcase */}
+        <div className="bg-white/80 rounded-2xl shadow-xl p-6">
+          <QuestionShowcase />
+        </div>
+      </main>
+    </div>
+  );
 };
 
 export default AdminPanel;

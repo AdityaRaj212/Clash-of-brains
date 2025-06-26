@@ -9,6 +9,7 @@ import WaitingPage from './pages/WaitingPage';
 import QuizPage from './pages/QuizPage';
 import ResultPage from './pages/ResultPage';
 import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoutes';
 
 function App() {
   return (
@@ -16,13 +17,44 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Auth />} />
-          <Route path="/admin-panel" element={<AdminPanel />} />
-          <Route path="/user-panel" element={<UserPanel/>}/>
-          <Route path="/create-question" element={<CreateQuestion/>} />
-          <Route path="/question-page/:questionId" element={<QuestionPage/>}/>
+
+          <Route path="/admin-panel" element={
+            <ProtectedRoute>
+                <AdminPanel />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/user-panel" element={
+            <ProtectedRoute>
+              <UserPanel/>
+            </ProtectedRoute>}
+          />
+
+          <Route path="/create-question" element={
+            <ProtectedRoute>
+              <CreateQuestion/>
+            </ProtectedRoute>  
+          } />
+
+          <Route path="/question-page/:questionId" element={
+            <ProtectedRoute>
+              <QuestionPage/>
+            </ProtectedRoute>  
+          }/>
+
           <Route path="/quiz-waiting-lobby" element={<WaitingPage/>}/>
-          <Route path="/quiz/:quizId" element={<QuizPage/>}/>
-          <Route path="/result/:quizId" element={<ResultPage/>} />
+
+          <Route path="/quiz/:quizId" element={
+            <ProtectedRoute>
+              <QuizPage/>
+            </ProtectedRoute>  
+          }/>
+
+          <Route path="/result/:quizId" element={
+            <ProtectedRoute>
+              <ResultPage/>
+            </ProtectedRoute>  
+          } />
         </Routes>
       </Router>
     </AuthProvider>
